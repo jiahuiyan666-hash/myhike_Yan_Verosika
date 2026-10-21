@@ -25,8 +25,27 @@
     <div class="container py-5 text-center">
       <h1>You are logged in to VerosikaHikes!</h1>
       <h2>Hello, <span id="name-goes-here"></span></h2>
-      <p>Every hike starts with one step.</p>
+      <p>Quote of the day: <span id="quote-goes-here"></span></p>
     </div>
+
+    <div class="container py-4">
+      <h2>Popular Hike</h2>
+      <div id="hikes-go-here" class="row g-3"></div>
+    </div>
+
+    <template id="hikeCardTemplate">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img class="card-img-top card-image" alt="Hike image" />
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+            <p class="card-text"></p>
+            <p>Length: <span class="card-length"></span>km</p>
+            <a class="btn btn-primary read-more" href="#">Read More</a>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <!-- our own footer goes here -->
     <site-footer></site-footer>

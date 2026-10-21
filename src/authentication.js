@@ -7,7 +7,8 @@
 // -------------------------------------------------------------
 
 // Import the initialized Firebase Authentication object
-import { auth } from "/src/firebaseConfig.js";
+import { auth, db } from "/src/firebaseConfig.js";
+import { doc, setDoc } from "firebase/firestore";
 
 // Import specific functions from the Firebase Auth SDK
 import {
@@ -33,6 +34,12 @@ import {
 // -------------------------------------------------------------
 export async function loginUser(email, password) {
   return signInWithEmailAndPassword(auth, email, password);
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password,
+  );
+  return signInWithEmailAndPassword(auth, email, password);
 }
 
 // -------------------------------------------------------------
@@ -57,6 +64,12 @@ export async function signupUser(name, email, password) {
     password,
   );
   await updateProfile(userCredential.user, { displayName: name });
+  await setDoc(doc(db, "users", userCredential.user.uid), {
+    name: name,
+    email: email,
+    country: "Canada",
+    school: "BCIT",
+  });
   return userCredential.user;
 }
 
