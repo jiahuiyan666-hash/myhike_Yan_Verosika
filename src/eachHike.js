@@ -1,5 +1,6 @@
 import { db } from "/src/firebaseConfig.js";
 import { doc, getDoc } from "firebase/firestore";
+import { updateDoc, increment } from "firebase/firestore";
 
 const params = new URL(window.location.href).searchParams;
 const hikeId = params.get("docID");
@@ -24,6 +25,8 @@ async function displayHikeInfo() {
     const img = document.getElementById("hikeImage");
     img.src = `/images/${hike.code}.jpg`;
     img.alt = `${hike.name} image`;
+    await updateDoc(hikeRef, { views: increment(1) });
+    document.getElementById("viewCount").textContent = (hike.views || 0) + 1;
   } catch (error) {
     console.error("Error loading hike:", error);
     document.getElementById("hikeName").textContent = "Error loading hike.";

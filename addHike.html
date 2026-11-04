@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>My BCIT Project</title>
+    <meta name="comp1800 template" content="My 1800 App" />
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Web Components for shared navbar and footer layout -->
+    <script type="module" src="/src/components/site-navbar.js"></script>
+    <script type="module" src="/src/components/site-footer.js"></script>
+  </head>
+
+  <body>
+    <!------------------------------>
+    <!-- Your HTML Layout go here -->
+    <!------------------------------>
+
+    <!-- our own navbar goes here -->
+    <site-navbar></site-navbar>
+
+    <main class="container py-4" style="max-width: 420px">
+      <h1>Add a Hike</h1>
+
+      <form id="addHikeForm" novalidate>
+        <div class="mb-3">
+          <label for="hikeNameInput" class="form-label">Hike Name</label>
+          <input
+            type="text"
+            id="hikeNameInput"
+            class="form-control"
+            placeholder="e.g/ Lynn Loop"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="cityInput" class="form-label">city</label>
+          <input
+            type="text"
+            id="cityInput"
+            class="form-control"
+            placeholder="e.g/ Vancouver"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="levelInput" class="form-label">Hike Level</label>
+          <select id="levelInput" class="form-select" required>
+            <option value="">Select a level</option>
+            <option value="Easy">Easy</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="lengthInput" class="form-label">Hike Length (km)</label>
+          <input
+            type="number"
+            id="lengthInput"
+            class="form-control"
+            step="0.1"
+            min="0"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="detailsInput" class="form-label">Hike Details</label>
+          <textarea
+            id="detailsInput"
+            class="form-control"
+            rows="3"
+            placeholder="What makes this hike special for you?"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Add Hike</button>
+      </form>
+    </main>
+
+    <!-- our own footer goes here -->
+    <site-footer></site-footer>
+
+    <!---------------------------------------------->
+    <!-- Your own JavaScript scripts go here      -->
+    <!---------------------------------------------->
+
+    <script type="module" src="/src/app.js"></script>
+    <script type="module" src="/src/addHike.js"></script>
+  </body>
+</html>

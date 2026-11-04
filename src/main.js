@@ -8,7 +8,9 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-
+import { getDoc, setDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+let currentUser = null;
+let favourites = [];
 // Read quote from Firestore
 function readQuote(day) {
   const quoteRef = doc(db, "quotes", day);
@@ -96,11 +98,48 @@ async function displayCardsDynamically() {
     newCard.querySelector(".card-image").src = `/images/${hike.code}.jpg`;
     newCard.querySelector(".read-more").href =
       `eachHike.html?docID=${docSnap.id}`;
-
+    setupHeart(newCard, docSnap.id);
+    container.appendChild(newCard);
     container.appendChild(newCard);
   });
 }
+function setupHeart(card, hikeID) {
+  const heart = card.querySelector(".fav-btn");
 
+  if (favourites.includes(hikeID)) {
+    heart.classList.replace("bi-heart", "bi-heart-fill");
+  }
+
+  heart.addEventListener("click", function () {
+    toggleFavourite(heart, hikeID);
+  });
+}
+
+async function toggleFavourite(heart, hikeID) {
+  const userRef = doc(db, "users", currentUser.uid);
+
+  try {
+    if (heart.classList.contains("bi-heart-fill")) {
+      await setDoc(
+        userRef,
+        { favourites: arrayRemove(hikeID) },
+        { merge: true },
+      );
+
+      heart.classList.replace("bi-heart-fill", "bi-heart");
+    } else {
+      await setDoc(
+        userRef,
+        { favourites: arrayUnion(hikeID) },
+        { merge: true },
+      );
+
+      heart.classList.replace("bi-heart", "bi-heart-fill");
+    }
+  } catch (error) {
+    alert("Error saving favourite: " + error.message);
+  }
+}
 // Check login
 onAuthReady(async function (user) {
   if (user) {
@@ -109,6 +148,19 @@ onAuthReady(async function (user) {
 
     readQuote("tuesday");
     try {
+      currentUser = user;
+
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      favourites = [];
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        if (userData.favourites) {
+          favourites = userData.favourites;
+        }
+      }
       await seedHikes();
       await displayCardsDynamically();
     } catch (error) {
